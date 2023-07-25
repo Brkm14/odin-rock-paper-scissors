@@ -9,15 +9,21 @@ function getComputerChoice() {
     }
 }
 
-function playRound(){
-    let playerSelection = prompt("Write your weapon:");
-    if(playerSelection === null){
-        return null;
-    }else{
-        playerSelection = playerSelection.toLowerCase();
-    }
-
+function playRound(weapon){
+    let playerSelection = weapon;
     let computerSelection = getComputerChoice();
+
+    // if(playerSelection === null){
+    //     return null;
+    // }else{
+    //     playerSelection = playerSelection.toLowerCase();
+    // }
+
+    const playerImage = document.getElementById('playerImage');
+    const computerImage = document.getElementById('computerImage');
+    playerImage.src = `images/${playerSelection}.png`;
+    computerImage.src = `images/${computerSelection}.png`;
+
     if(playerSelection == "rock" && computerSelection == "scissors"){
         return "You Win! Rock beats Scissors"
     }else if(playerSelection == "rock" && computerSelection == "paper"){
@@ -38,54 +44,108 @@ function playRound(){
 
 }
 
-function playGame(){
-    let player = 0;
-    let computer = 0;
-    for (i = 0; i < 5; i++) {
-       let whoWin = playRound();
-       console.log(whoWin);
 
-       if(whoWin === null){
-        console.log("Game cancelled");
-        return;
-       }
+let player = 0;
+let computer = 0;
+
+function playGame(){
+   
+    
+        let result = ""; 
+       let whoWin = score;
+       //console.log(whoWin);
+
+    //    if(whoWin === null){
+    //     console.log("Game cancelled");
+    //     return;
+    //    }
 
        if(whoWin.includes("Win")){
             player++;
+            result += `Player: ${player} , Computer: ${computer}`;
        }else if(whoWin.includes("Lose")){
             computer++;
+            result += `Player: ${player} , Computer: ${computer}`;
+       }else if(whoWin.includes("Draw!")){
+            result += `Player: ${player} , Computer: ${computer}`;
        }
 
-       console.log(`Player: ${player} , Computer: ${computer}`);
+       
 
+    
+    if(player === 5 || computer === 5){
+        document.getElementById('rock').disabled = true;
+        document.getElementById('paper').disabled = true;
+        document.getElementById('scissors').disabled = true;
+        if(player > computer){
+            result += "\n Player Win! Do you want to play again ?";
+        } else if(computer > player){
+            result += "\n Computer Win! Do you want to play again ?";
+        } else {
+            result += "\n Draw! Friendship won! Do you want to play again ? ";
+        }
+        //document.getElementById('playAgainButton').disabled = false;
     }
-
-    if(player > computer){
-        console.log("Player Win! Player: " + player + " Computer: " + computer);
-    } else if(computer > player){
-         console.log("Computer Win! Player: " + player + " Computer: " + computer);
-    } else {
-        console.log("Draw! Friendship won Player: " + player + " Computer: " + computer);
-    }
+    return result;
 }
 
-playGame();
+ 
 
-var playAgain = true;
+// var playAgain = true;
 
-while (playAgain) {
-    var answer = prompt("Do you want to play again? (Yes/No)");
+// while (playAgain) {
+//     var answer = prompt("Do you want to play again? (Yes/No)");
 
-    if (answer.toLowerCase() === "yes") {
-      console.log("Game restarting...");
-      playGame();
-    } else if (answer.toLowerCase() === "no") {
-      console.log("Game finished.");
-      playAgain = false;
-    } else {
-      console.log("Waiting for a valid answer...");
-    }
-  }
+//     if (answer.toLowerCase() === "yes") {
+//       console.log("Game restarting...");
+//       playGame();
+//     } else if (answer.toLowerCase() === "no") {
+//       console.log("Game finished.");
+//       playAgain = false;
+//     } else {
+//       console.log("Waiting for a valid answer...");
+//     }
+//   }
+
+
+const buttons = document.querySelectorAll('button');
+const div = document.querySelector(".text");
+const div2 = document.querySelector(".text2")
+let score = "";
+let winner = "";
+
+
+buttons.forEach((button) => {
+        
+
+        button.addEventListener('click', () => {
+            if (button.id === 'again') {
+                playAgain() ;
+            } else {
+                const btnTxt = button.textContent;
+                score = playRound(btnTxt);
+                div.textContent = score;
+                winner = playGame();
+                div2.textContent = winner;
+
+            }
+        });
+     
+  });
+
+
+  function playAgain() {
+    player = 0;
+    computer = 0;
+    document.getElementById('rock').disabled = false;
+    document.getElementById('paper').disabled = false;
+    document.getElementById('scissors').disabled = false;
+
+    div.textContent = "";
+    div2.textContent = "";
+}
+  
+
 
 
 
